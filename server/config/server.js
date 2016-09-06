@@ -1,3 +1,5 @@
+'use strict'
+
 //define requirements and create instance of express server
 const express = require('express')
 const bodyParser = require('body-parser')

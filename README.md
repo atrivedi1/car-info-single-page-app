@@ -1,4 +1,4 @@
-# smartcar-coding-challenge
+# car-info-single-page-app
 
 ##Getting Started
 1. Clone repo to your machine

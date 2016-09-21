@@ -37,25 +37,27 @@ function DashboardReducer(state, action) {
         " (VIN:" + vehicleVin + ")"
 
       //security information
-      let location1 = action.getIn(['carData', 'securityInfo', 0, 'location']).toLowerCase()
 
-      let location1SecurityStatus =
-        action.getIn(['carData', 'securityInfo', 0, 'locked']) ? "locked" : "unlocked"
+      let rawSecurityInfo = action.getIn(['carData', 'securityInfo']).toJS()
+      let securityInfoArr = [];
 
-      let location2 = action.getIn(['carData', 'securityInfo', 1, 'location']).toLowerCase()
+      rawSecurityInfo.forEach((door) => {
+        let rawDoorLocation = door.location.toLowerCase()
+        let doorLocation = rawDoorLocation.indexOf("front") > -1 ?
+                           rawDoorLocation.replace("front", "front-") :
+                           rawDoorLocation.replace("back", "back-")
 
-      let location2SecurityStatus =
-        action.getIn(['carData', 'securityInfo', 0, 'locked']) ? "locked" : "unlocked"
+        let lockStatus = door.locked === true ? "locked" : "unlocked"
+        securityInfoArr.push(doorLocation + " door is " + lockStatus)
+      })
 
-      let securityInfo =
-        location1 + " door is " +  location1SecurityStatus + "; " +
-        location2 + " door is " + location2SecurityStatus
+      let securityInfo = securityInfoArr.join("; ")
 
       //energy information
       let rawFuelData = action.getIn(['carData', 'fuelRange', 'percent'])
-      let fuelRange = rawFuelData !== "null" ? rawFuelData + "%" : "N/A"
+      let fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A"
       let rawBatteryData = action.getIn(['carData', 'batteryRange', 'percent'])
-      let batteryRange = rawBatteryData !== "null" ? rawBatteryData + "%" : "N/A"
+      let batteryRange = rawBatteryData !== null ? rawBatteryData + "%" : "N/A"
 
       //update state
       return state

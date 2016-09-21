@@ -1,6 +1,5 @@
 'use strict'
 //NOTE: If I had more time I would refactor to make this more DRY
-const nock = require('nock')
 const requestPromise = require('request-promise')
 const baseGmApiUrl = 'http://gmapi.azurewebsites.net'
 
@@ -40,13 +39,13 @@ module.exports = {
 
     requestPromise(requestOptions)
       .then((securityInfo) => {
-        let cleanedUpSecurityInfo = [
-          { location: securityInfo.data.doors.values[0].location.value,
-            locked: Boolean(securityInfo.data.doors.values[0].locked.value) },
 
-          { location: securityInfo.data.doors.values[1].location.value,
-            locked: Boolean(securityInfo.data.doors.values[1].locked.value) }
-        ]
+        let cleanedUpSecurityInfo = securityInfo.data.doors.values.map((doorStatus) => {
+          return {
+            location: doorStatus.location.value,
+            locked: doorStatus.locked.value === "True" ? true : false
+          }
+        })
 
         res.status(200).json(cleanedUpSecurityInfo)
         cb()
@@ -60,7 +59,11 @@ module.exports = {
 
     requestPromise(requestOptions)
       .then((energyInfo) => {
-        let fuelRangeInfo = { "percent": energyInfo.data.tankLevel.value }
+        let fuelLevel = energyInfo.data.tankLevel.value === "null" ?
+                        null :
+                        parseFloat(energyInfo.data.tankLevel.value).toFixed(2)
+
+        let fuelRangeInfo = { "percent": fuelLevel }
         res.status(200).json(fuelRangeInfo)
         cb()
       })
@@ -73,7 +76,11 @@ module.exports = {
 
     requestPromise(requestOptions)
       .then((energyInfo) => {
-        let batteryRangeInfo = { "percent": energyInfo.data.batteryLevel.value }
+        let batteryLevel = energyInfo.data.batteryLevel.value === "null" ?
+                           null :
+                           parseFloat(energyInfo.data.batteryLevel.value).toFixed(2)
+
+        let batteryRangeInfo = { "percent": batteryLevel }
         res.status(200).json(batteryRangeInfo)
         cb()
       })

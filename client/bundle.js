@@ -57073,6 +57073,7 @@
 	
 	          rawSecurityInfo.forEach(function (door) {
 	            var rawDoorLocation = door.location.toLowerCase();
+	
 	            var doorLocation = rawDoorLocation.indexOf("front") > -1 ? rawDoorLocation.replace("front", "front-") : rawDoorLocation.replace("back", "back-");
 	
 	            var lockStatus = door.locked === true ? "locked" : "unlocked";

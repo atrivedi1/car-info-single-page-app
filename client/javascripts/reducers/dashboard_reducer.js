@@ -43,6 +43,7 @@ function DashboardReducer(state, action) {
 
       rawSecurityInfo.forEach((door) => {
         let rawDoorLocation = door.location.toLowerCase()
+
         let doorLocation = rawDoorLocation.indexOf("front") > -1 ?
                            rawDoorLocation.replace("front", "front-") :
                            rawDoorLocation.replace("back", "back-")

@@ -57027,6 +57027,8 @@
 
 	"use strict";
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var Immutable = __webpack_require__(/*! immutable */ 275);
 	
 	var initialDashboardState = Immutable.fromJS({
@@ -57055,33 +57057,43 @@
 	
 	    case "DATA_FOR_CAR_RETRIEVED":
 	      {
-	        //vehicle information
-	        var vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase();
-	        var vehicleDoorCount = action.getIn(['carData', 'vehicleInfo', 'doorCount']);
-	        var vehicleDriveTrain = action.getIn(['carData', 'vehicleInfo', 'driveTrain']);
-	        var vehicleVin = action.getIn(['carData', 'vehicleInfo', 'vin']);
+	        var _ret = function () {
+	          //vehicle information
+	          var vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase();
+	          var vehicleDoorCount = action.getIn(['carData', 'vehicleInfo', 'doorCount']);
+	          var vehicleDriveTrain = action.getIn(['carData', 'vehicleInfo', 'driveTrain']);
+	          var vehicleVin = action.getIn(['carData', 'vehicleInfo', 'vin']);
 	
-	        var vehicleInfo = vehicleDoorCount + " door " + vehicleColor + " " + vehicleDriveTrain + " (VIN:" + vehicleVin + ")";
+	          var vehicleInfo = vehicleDoorCount + " door " + vehicleColor + " " + vehicleDriveTrain + " (VIN:" + vehicleVin + ")";
 	
-	        //security information
-	        var location1 = action.getIn(['carData', 'securityInfo', 0, 'location']).toLowerCase();
+	          //security information
 	
-	        var location1SecurityStatus = action.getIn(['carData', 'securityInfo', 0, 'locked']) ? "locked" : "unlocked";
+	          var rawSecurityInfo = action.getIn(['carData', 'securityInfo']).toJS();
+	          var securityInfoArr = [];
 	
-	        var location2 = action.getIn(['carData', 'securityInfo', 1, 'location']).toLowerCase();
+	          rawSecurityInfo.forEach(function (door) {
+	            var rawDoorLocation = door.location.toLowerCase();
+	            var doorLocation = rawDoorLocation.indexOf("front") > -1 ? rawDoorLocation.replace("front", "front-") : rawDoorLocation.replace("back", "back-");
 	
-	        var location2SecurityStatus = action.getIn(['carData', 'securityInfo', 0, 'locked']) ? "locked" : "unlocked";
+	            var lockStatus = door.locked === true ? "locked" : "unlocked";
+	            securityInfoArr.push(doorLocation + " door is " + lockStatus);
+	          });
 	
-	        var securityInfo = location1 + " door is " + location1SecurityStatus + "; " + location2 + " door is " + location2SecurityStatus;
+	          var securityInfo = securityInfoArr.join("; ");
 	
-	        //energy information
-	        var rawFuelData = action.getIn(['carData', 'fuelRange', 'percent']);
-	        var fuelRange = rawFuelData !== "null" ? rawFuelData + "%" : "N/A";
-	        var rawBatteryData = action.getIn(['carData', 'batteryRange', 'percent']);
-	        var batteryRange = rawBatteryData !== "null" ? rawBatteryData + "%" : "N/A";
+	          //energy information
+	          var rawFuelData = action.getIn(['carData', 'fuelRange', 'percent']);
+	          var fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A";
+	          var rawBatteryData = action.getIn(['carData', 'batteryRange', 'percent']);
+	          var batteryRange = rawBatteryData !== null ? rawBatteryData + "%" : "N/A";
 	
-	        //update state
-	        return state.setIn(['carInformation', 'vehicleInfo'], vehicleInfo).setIn(['carInformation', 'securityInfo'], securityInfo).setIn(['carInformation', 'fuelRange'], fuelRange).setIn(['carInformation', 'batteryRange'], batteryRange).set('displayEngineInfo', true);
+	          //update state
+	          return {
+	            v: state.setIn(['carInformation', 'vehicleInfo'], vehicleInfo).setIn(['carInformation', 'securityInfo'], securityInfo).setIn(['carInformation', 'fuelRange'], fuelRange).setIn(['carInformation', 'batteryRange'], batteryRange).set('displayEngineInfo', true)
+	          };
+	        }();
+	
+	        if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 	      }
 	
 	    default:

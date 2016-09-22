@@ -18,7 +18,7 @@ module.exports = {
 
     requestPromise(requestOptions)
       .then((vehicleInfo) => {
-        let doorCount = vehicleInfo.data.fourDoorSedan.value ? 4 : 2
+        let doorCount = vehicleInfo.data.fourDoorSedan.value === "True" ? 4 : 2
 
         let cleanedUpVehicleInfo = {
           vin: vehicleInfo.data.vin.value,

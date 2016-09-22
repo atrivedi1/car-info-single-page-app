@@ -1,6 +1,6 @@
-const nock = require('nock')
 const { EventEmitter } = require('events')
 const httpMock = require('node-mocks-http')
+const nock = require('nock')
 const expect = require('chai').expect
 
 const dashboardController = require('../server/controllers/dashboard_controller.js')
@@ -80,14 +80,8 @@ describe("Testing HTTP routes related to the dashboard", function () {
       let securityInfo = JSON.parse(res._getData())
 
       expect(securityInfo).to.eql([
-        {
-          location: "frontLeft",
-          locked: false
-        },
-        {
-          location: "frontRight",
-          locked: true
-        }
+        { location: "frontLeft", locked: false },
+        { location: "frontRight", locked: true }
       ])
 
       done()

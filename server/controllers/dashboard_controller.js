@@ -61,7 +61,7 @@ module.exports = {
       .then((energyInfo) => {
         let fuelLevel = energyInfo.data.tankLevel.value === "null" ?
                         null :
-                        parseFloat(energyInfo.data.tankLevel.value).toFixed(2)
+                        parseInt(energyInfo.data.tankLevel.value)
 
         let fuelRangeInfo = { "percent": fuelLevel }
         res.status(200).json(fuelRangeInfo)
@@ -78,7 +78,7 @@ module.exports = {
       .then((energyInfo) => {
         let batteryLevel = energyInfo.data.batteryLevel.value === "null" ?
                            null :
-                           parseFloat(energyInfo.data.batteryLevel.value).toFixed(2)
+                           parseInt(energyInfo.data.batteryLevel.value)
 
         let batteryRangeInfo = { "percent": batteryLevel }
         res.status(200).json(batteryRangeInfo)

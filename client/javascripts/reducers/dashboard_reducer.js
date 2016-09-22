@@ -25,8 +25,8 @@ function DashboardReducer(state, action) {
 
     case "DATA_FOR_CAR_RETRIEVED": {
       //vehicle information
-      let vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase()
       let vehicleDoorCount = action.getIn(['carData', 'vehicleInfo', 'doorCount'])
+      let vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase()
       let vehicleDriveTrain = action.getIn(['carData', 'vehicleInfo', 'driveTrain'])
       let vehicleVin = action.getIn(['carData', 'vehicleInfo', 'vin'])
 
@@ -43,6 +43,7 @@ function DashboardReducer(state, action) {
 
       rawSecurityInfo.forEach((door) => {
         let rawDoorLocation = door.location.toLowerCase()
+
         let doorLocation = rawDoorLocation.indexOf("front") > -1 ?
                            rawDoorLocation.replace("front", "front-") :
                            rawDoorLocation.replace("back", "back-")
@@ -55,8 +56,9 @@ function DashboardReducer(state, action) {
 
       //energy information
       let rawFuelData = action.getIn(['carData', 'fuelRange', 'percent'])
-      let fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A"
       let rawBatteryData = action.getIn(['carData', 'batteryRange', 'percent'])
+
+      let fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A"
       let batteryRange = rawBatteryData !== null ? rawBatteryData + "%" : "N/A"
 
       //update state

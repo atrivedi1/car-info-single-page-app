@@ -16,6 +16,7 @@ app.use(express.static(buildPath))
 
 //connect on routes
 require('../routes/routes.js')(app)
+
 //listen on port
 var port = process.env.PORT || 3000
 app.listen(port, () => console.log("Server listening on port: " + port))

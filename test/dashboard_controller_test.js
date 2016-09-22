@@ -1,9 +1,6 @@
-//used template found in:
-//https://tobythetesterblog.wordpress.com/2016/05/01/
-//mocking-a-restful-api-using-nock-supertest-mocha-and-chai/
-const nock = require('nock')
 const { EventEmitter } = require('events')
 const httpMock = require('node-mocks-http')
+const nock = require('nock')
 const expect = require('chai').expect
 
 const dashboardController = require('../server/controllers/dashboard_controller.js')
@@ -60,7 +57,7 @@ describe("Testing HTTP routes related to the dashboard", function () {
                 },
                 "locked": {
                   "type": "Boolean",
-                  "value": "True"
+                  "value": "False"
                 }
               },
               {
@@ -83,14 +80,8 @@ describe("Testing HTTP routes related to the dashboard", function () {
       let securityInfo = JSON.parse(res._getData())
 
       expect(securityInfo).to.eql([
-        {
-          location: "frontLeft",
-          locked: true
-        },
-        {
-          location: "frontRight",
-          locked: true
-        }
+        { location: "frontLeft", locked: false },
+        { location: "frontRight", locked: true }
       ])
 
       done()
@@ -121,7 +112,7 @@ describe("Testing HTTP routes related to the dashboard", function () {
     //perform the request to the api which will now be intercepted by nock
     dashboardController.getFuelRange(req, res, (err) => {
       let fuelRange = JSON.parse(res._getData())
-      expect(fuelRange).to.eql({ percent: "70" })
+      expect(fuelRange).to.eql({ percent: 70 })
       done()
     })
   })
@@ -150,7 +141,7 @@ describe("Testing HTTP routes related to the dashboard", function () {
     //perform the request to the api which will now be intercepted by nock
     dashboardController.getBatteryRange(req, res, (err) => {
       let batteryRange = JSON.parse(res._getData())
-      expect(batteryRange).to.eql({ percent: "24" })
+      expect(batteryRange).to.eql({ percent: 24 })
       done()
     })
   })

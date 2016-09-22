@@ -57059,8 +57059,8 @@
 	      {
 	        var _ret = function () {
 	          //vehicle information
-	          var vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase();
 	          var vehicleDoorCount = action.getIn(['carData', 'vehicleInfo', 'doorCount']);
+	          var vehicleColor = action.getIn(['carData', 'vehicleInfo', 'color']).toLowerCase();
 	          var vehicleDriveTrain = action.getIn(['carData', 'vehicleInfo', 'driveTrain']);
 	          var vehicleVin = action.getIn(['carData', 'vehicleInfo', 'vin']);
 	
@@ -57073,6 +57073,7 @@
 	
 	          rawSecurityInfo.forEach(function (door) {
 	            var rawDoorLocation = door.location.toLowerCase();
+	
 	            var doorLocation = rawDoorLocation.indexOf("front") > -1 ? rawDoorLocation.replace("front", "front-") : rawDoorLocation.replace("back", "back-");
 	
 	            var lockStatus = door.locked === true ? "locked" : "unlocked";
@@ -57083,8 +57084,9 @@
 	
 	          //energy information
 	          var rawFuelData = action.getIn(['carData', 'fuelRange', 'percent']);
-	          var fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A";
 	          var rawBatteryData = action.getIn(['carData', 'batteryRange', 'percent']);
+	
+	          var fuelRange = rawFuelData !== null ? rawFuelData + "%" : "N/A";
 	          var batteryRange = rawBatteryData !== null ? rawBatteryData + "%" : "N/A";
 	
 	          //update state

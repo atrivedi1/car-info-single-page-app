@@ -1,6 +1,6 @@
-const nock = require('nock')
 const { EventEmitter } = require('events')
 const httpMock = require('node-mocks-http')
+const nock = require('nock')
 const expect = require('chai').expect
 
 const engineController = require('../server/controllers/engine_controller.js')
@@ -10,7 +10,7 @@ describe("Testing HTTP routes related to the engine", function () {
 
   beforeEach(function(done) {
     req = httpMock.createRequest({ params: { carId: ':1234' } })
-    res = httpMock.createResponse({ EventEmitter: EventEmitter })
+    res = httpMock.createResponse({ eventEmitter: EventEmitter })
     done()
   })
 

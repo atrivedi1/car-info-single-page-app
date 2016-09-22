@@ -10,44 +10,30 @@ function selectCar(dispatch, selected) {
 }
 
 function fetchCarData(dispatch, carId) {
-  $.when(
-    $.ajax({
-      type: 'GET',
-      url: baseUrl + '/vehicles/:' + carId,
-      data: { carId: carId },
-      success: function(data) {
-        console.log("vehicle info request complete")
-      }
-    }),
+  let paths = ["", '/doors', '/fuel', '/battery']
 
-    $.ajax({
-      type: 'GET',
-      url: baseUrl + '/vehicles/:' + carId + '/doors',
-      data: { carId: carId },
-      success: function(data) {
-        console.log("security request complete")
-      }
-    }),
+  let pathInfoType = {
+    "": "vehicle info",
+    "/doors": "security info",
+    "/fuel": "fuel info",
+    "/battery": "battery info"
+  }
 
-    $.ajax({
-      type: 'GET',
-      url: baseUrl + '/vehicles/:' + carId + '/fuel',
-      data: { carId: carId },
-      success: function(data) {
-        console.log("fuel request complete")
-      }
-    }),
+  let arrayOfRequests = []
 
-    $.ajax({
+  paths.forEach((path) => {
+    arrayOfRequests.push($.ajax({
       type: 'GET',
-      url: baseUrl + '/vehicles/:' + carId + '/battery',
+      url: baseUrl + '/vehicles/:' + carId + path,
       data: { carId: carId },
       success: function(data) {
-        console.log("battery request complete")
+        console.log(pathInfoType[path] +  " request complete")
       }
-    })
-  )
-  .then((dataFromVehicleReq, dataFromSecurityReq, dataFromFuelReq, dataFromBatteryReq) => {
+    }))
+  })
+
+  $.when.apply($, arrayOfRequests)
+   .then((dataFromVehicleReq, dataFromSecurityReq, dataFromFuelReq, dataFromBatteryReq) => {
     let vehicleInfo = dataFromVehicleReq[0]
     let securityInfo = dataFromSecurityReq[0]
     let fuelRange = dataFromFuelReq[0]

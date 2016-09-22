@@ -50697,7 +50697,7 @@
   \*************************************************/
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	var baseUrl = 'http://localhost:3000';
 	
@@ -50711,35 +50711,29 @@
 	}
 	
 	function fetchCarData(dispatch, carId) {
-	  $.when($.ajax({
-	    type: 'GET',
-	    url: baseUrl + '/vehicles/:' + carId,
-	    data: { carId: carId },
-	    success: function success(data) {
-	      console.log("vehicle info request complete");
-	    }
-	  }), $.ajax({
-	    type: 'GET',
-	    url: baseUrl + '/vehicles/:' + carId + '/doors',
-	    data: { carId: carId },
-	    success: function success(data) {
-	      console.log("security request complete");
-	    }
-	  }), $.ajax({
-	    type: 'GET',
-	    url: baseUrl + '/vehicles/:' + carId + '/fuel',
-	    data: { carId: carId },
-	    success: function success(data) {
-	      console.log("fuel request complete");
-	    }
-	  }), $.ajax({
-	    type: 'GET',
-	    url: baseUrl + '/vehicles/:' + carId + '/battery',
-	    data: { carId: carId },
-	    success: function success(data) {
-	      console.log("battery request complete");
-	    }
-	  })).then(function (dataFromVehicleReq, dataFromSecurityReq, dataFromFuelReq, dataFromBatteryReq) {
+	  var paths = ["", '/doors', '/fuel', '/battery'];
+	
+	  var pathInfoType = {
+	    "": "vehicle info",
+	    "/doors": "security info",
+	    "/fuel": "fuel info",
+	    "/battery": "battery info"
+	  };
+	
+	  var arrayOfRequests = [];
+	
+	  paths.forEach(function (path) {
+	    arrayOfRequests.push($.ajax({
+	      type: 'GET',
+	      url: baseUrl + '/vehicles/:' + carId + path,
+	      data: { carId: carId },
+	      success: function success(data) {
+	        console.log(pathInfoType[path] + " request complete");
+	      }
+	    }));
+	  });
+	
+	  $.when.apply($, arrayOfRequests).then(function (dataFromVehicleReq, dataFromSecurityReq, dataFromFuelReq, dataFromBatteryReq) {
 	    var vehicleInfo = dataFromVehicleReq[0];
 	    var securityInfo = dataFromSecurityReq[0];
 	    var fuelRange = dataFromFuelReq[0];
